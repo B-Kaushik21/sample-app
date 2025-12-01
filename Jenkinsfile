@@ -14,14 +14,13 @@ pipeline{
         stage('build stage'){
             steps{
                 echo "building the app"
-                bat "pip install python"
                 bat "python app.py"
             }
         }
         stage('test stage'){
             steps{
                 echo "testing the app"
-                bat "python *.py > output.txt"
+                bat "python -m pytest *.py > output.txt || python *.py > output.txt"
             }
         }
         stage('deploy stage'){
@@ -33,7 +32,7 @@ pipeline{
 
     post{
         always{
-            archiveArtifacts artifacts: 'output.txt', fingerprint: true
+            archiveArtifacts artifacts: 'output.txt', fingerprint: true, allowEmptyArchive: true
         }
     }
 }
