@@ -14,6 +14,7 @@ pipeline{
         stage('build stage'){
             steps{
                 echo "building the app"
+                bat "pip install python"
                 bat "python app.py"
             }
         }
