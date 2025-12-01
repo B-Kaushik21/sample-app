@@ -3,7 +3,8 @@ pipeline{
     environment{
         git_branch='main'
         git_url='https://github.com/B-Kaushik21/sample-app.git'
-        PATH="C:\\Python39\\;C:\\Python39\\Scripts\\;${PATH}"
+        PYTHON = "C:\\Users\\Kaushik\\AppData\\Local\\Programs\\Python\\Python312" 
+        PATH = "${PYTHON};${PYTHON}\\Scripts;${env.PATH}"
     }
     stages{
         stage('checkout scm'){
