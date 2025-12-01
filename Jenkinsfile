@@ -3,6 +3,7 @@ pipeline{
     environment{
         git_branch='main'
         git_url='https://github.com/B-Kaushik21/sample-app.git'
+        PATH="C:\\Python39\\;C:\\Python39\\Scripts\\;${PATH}"
     }
     stages{
         stage('checkout scm'){
@@ -20,7 +21,7 @@ pipeline{
         stage('test stage'){
             steps{
                 echo "testing the app"
-                bat "python -m pytest *.py > output.txt || python *.py > output.txt"
+                bat "python *.py > output.txt"
             }
         }
         stage('deploy stage'){
