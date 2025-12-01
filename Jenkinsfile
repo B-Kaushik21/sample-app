@@ -1,8 +1,8 @@
 pipeline{
     agent any
     environment{
-        git_branch='main',
-        git_url='https://github.com/B-Kaushik21/sample-app.git'
+        git_branch=main,
+        git_url=https://github.com/B-Kaushik21/sample-app.git
     }
     stages{
         stage('checkout scm'){
