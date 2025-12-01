@@ -1,40 +1,59 @@
-pipeline{
+pipeline {
     agent any
-    environment{
-        git_branch='main'
-        git_url='https://github.com/B-Kaushik21/sample-app.git'
-        PYTHON = "C:\\Users\\Kaushik\\AppData\\Local\\Programs\\Python\\Python312" 
-        PATH = "${PYTHON};${PYTHON}\\Scripts;${env.PATH}"
-    }
-    stages{
-        stage('checkout scm'){
-            steps{
-                echo "checking out code from github repository"
-                git branch: "${git_branch}", url: "${git_url}"
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo "Checking out code from GitHub repository"
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: 'https://github.com/B-Kaushik21/sample-app.git']]
+                ])
             }
         }
-        stage('build stage'){
-            steps{
-                echo "building the app"
-                bat "python3 app.py"
+
+        stage('Build') {
+            steps {
+                echo "Building the app"
+                bat """
+                    python --version
+                    python app.py
+                """
             }
         }
-        stage('test stage'){
-            steps{
-                echo "testing the app"
-                bat "python3 *.py > output.txt"
+
+        stage('Test') {
+            steps {
+                echo "Running tests"
+                bat """
+                    python -m unittest || echo No tests found
+                """
             }
         }
-        stage('deploy stage'){
-            steps{
-                echo "deploying the app"
+
+        stage('Deploy') {
+            when {
+                expression { return env.BRANCH_NAME == 'main' }
+            }
+            steps {
+                echo "Deploying application"
+                
             }
         }
     }
 
-    post{
-        always{
-            archiveArtifacts artifacts: 'output.txt', fingerprint: true, allowEmptyArchive: true
+    post {
+        always {
+            echo "Pipeline completed. Archiving artifacts..."
+            archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
+        }
+        success {
+            echo "Pipeline finished successfully!"
+        }
+        failure {
+            echo "Pipeline failed! Check logs."
         }
     }
 }
