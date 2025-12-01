@@ -15,13 +15,13 @@ pipeline{
         stage('build stage'){
             steps{
                 echo "building the app"
-                bat "python app.py"
+                bat "python3 app.py"
             }
         }
         stage('test stage'){
             steps{
                 echo "testing the app"
-                bat "python *.py > output.txt"
+                bat "python3 *.py > output.txt"
             }
         }
         stage('deploy stage'){
